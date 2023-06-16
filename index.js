@@ -12,63 +12,50 @@ const opKeys = createOpKeys(calcOpKeys);
 // input
 
 let gRawInput = "";
-let gNumOne = "";
-let gNumTwo = "";
-let gMathOperator = "";
+let gCountOperatorPress = 0;
 
 const numKeyAction = (button) => {
-
-    if ( calcDisplay.textContent.includes("=") ) return;
-
-    num = button.textContent;
-
-    gRawInput += num;
-
-    // update display
-    updateDisplay(num);
-
-    console.log(gRawInput);
-
+    const input = button.textContent;
+    gRawInput += input;
+    updateDisplay(input);
 };
 
 const opKeyAction = (button) => {
 
-    if (button.textContent === "CLEAR") {
+    if (gRawInput === "") return;
+
+    const mathOp = button.textContent;
+
+    if (mathOp === "CLEAR") {
         clearAll();
         return;
     }
 
-    if (gRawInput === "") return; // no number present to operate on
+    ++gCountOperatorPress;
 
-    if (gMathOperator === "") {
-        gMathOperator = button.textContent;
-        gNumOne = gRawInput;
-        gRawInput = "";
-        updateDisplay(gMathOperator);
-    } else {
-        gNumTwo = gRawInput;
-        gRawInput = "";
+    if (gCountOperatorPress >= 2) {
+        gCountOperatorPress = 1;
+        
+        const result = getResult();
 
-        let result = mathOperate(gNumOne, gNumTwo, gMathOperator);
-
-        result = Number(result.toFixed())
-
-        gNumOne = result;
-        gNumTwo = "";
-        gMathOperator = button.textContent;
+        if (result === false) {
+            return;
+        }
+        gRawInput = result; // returns answer to the calculation
 
         clearDisplay();
+        updateDisplay(gRawInput);
 
-        updateDisplay(result);
-
-        if ( gMathOperator === "=") {
-            gMathOperator = "";
-
-        } else {
-            updateDisplay(gMathOperator);
-        }
-        
     }
+
+    if (mathOp === "=")
+    {
+        gCountOperatorPress = 0
+    } else {
+        gRawInput += mathOp;         
+        updateDisplay(mathOp);
+    }
+    
 };
 
 setButtonActions(numKeys, numKeyAction); 
@@ -79,13 +66,29 @@ setButtonActions(opKeys, opKeyAction);
 
 // FUNCTIONS
 
+function getResult()
+{
+    mathOpIndex = gRawInput.search(/[+|-|*|\/]/); // find the operator
+    
+    mathOp = gRawInput[mathOpIndex];
+
+    numbers = gRawInput.split(mathOp);
+
+    if (numbers[1] === "") return false; // when a only a single operator and operand are submitted (occurs with "=")
+
+    numOne = numbers[0];
+    numTwo = numbers[1];
+
+    const result = mathOperate(numOne, numTwo, mathOp);
+
+    return Number(result).toFixed(3);
+}
+
 function clearAll()
 {
     clearDisplay()
     gRawInput = "";
-    gNumOne = "";
-    gNumTwo = "";
-    gMathOperator = "";
+    gCountOperatorPress = 0
 }
 
 
