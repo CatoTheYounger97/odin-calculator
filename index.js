@@ -47,12 +47,12 @@ const opKeyAction = (button) => {
         updateDisplay(gMathOperator);
     } else {
         gNumTwo = gRawInput;
-        gRawInput = 0;
+        gRawInput = "";
 
         let result = mathOperate(gNumOne, gNumTwo, gMathOperator);
 
         result = Number(result.toFixed())
-        
+
         gNumOne = result;
         gNumTwo = "";
         gMathOperator = button.textContent;
