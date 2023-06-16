@@ -2,33 +2,124 @@
 // create calculator body structure
 const pageContainer = createSubElements( document.body, 1, "div", null, "pageContainer");
 const calcDisplay = createSubElements(pageContainer, 1, "div", null, "calcDisplay");
-calcDisplay.innerText = "PLACEHOLDER";
 const calcKeypad = createSubElements(pageContainer, 1, "div", null, "calcKeypad");
 // create calculator buttons
 const calcNumKeys = createSubElements(calcKeypad, 1, "div", null, "calcNumKeys");
 const calcOpKeys = createSubElements(calcKeypad, 1, "div", null, "calcOpKeys");
 
-createNumKeys(calcNumKeys);
-createOpKeys(calcOpKeys);
+const numKeys = createNumKeys(calcNumKeys);
+const opKeys = createOpKeys(calcOpKeys);
 // input
 
-let gCalcInput = [];
+let gRawInput = "";
+let gNumOne = "";
+let gNumTwo = "";
+let gMathOperator = "";
 
-// calculate 
+const numKeyAction = (button) => {
 
-// display 
+    if ( calcDisplay.textContent.includes("=") ) return;
 
-numKeyAction(calcDisplay);
+    num = button.textContent;
+
+    gRawInput += num;
+
+    // update display
+    updateDisplay(num);
+
+    console.log(gRawInput);
+
+};
+
+const opKeyAction = (button) => {
+
+    if (button.textContent === "CLEAR") {
+        clearAll();
+        return;
+    }
+
+    if (gRawInput === "") return; // no number present to operate on
+
+    if (gMathOperator === "") {
+        gMathOperator = button.textContent;
+        gNumOne = gRawInput;
+        gRawInput = "";
+        updateDisplay(gMathOperator);
+    } else {
+        gNumTwo = gRawInput;
+        gRawInput = 0;
+
+        let result = mathOperate(gNumOne, gNumTwo, gMathOperator);
+
+        result = Number(result.toFixed())
+        
+        gNumOne = result;
+        gNumTwo = "";
+        gMathOperator = button.textContent;
+
+        clearDisplay();
+
+        updateDisplay(result);
+
+        if ( gMathOperator === "=") {
+            gMathOperator = "";
+
+        } else {
+            updateDisplay(gMathOperator);
+        }
+        
+    }
+};
+
+setButtonActions(numKeys, numKeyAction); 
+
+setButtonActions(opKeys, opKeyAction); 
 
 
-function numKeyAction(display) 
+
+// FUNCTIONS
+
+function clearAll()
 {
-    const button = document.querySelectorAll(".NumKeys");
+    clearDisplay()
+    gRawInput = "";
+    gNumOne = "";
+    gNumTwo = "";
+    gMathOperator = "";
+}
 
-    button.forEach( (b) => {
+
+function mathOperate( x, y, mathOp)
+{
+    x = parseFloat(x);
+    y = parseFloat(y);
+
+    switch(mathOp)
+    {
+        case "+": return x + y;
+        case "-": return x - y;
+        case "*": return x * y;
+        case "/": return x / y;
+        default: return "?";
+    }
+}
+
+function updateDisplay(input)
+{
+    calcDisplay.textContent += input + " ";
+}
+
+function clearDisplay()
+{
+    calcDisplay.textContent = "";
+}
+
+
+function setButtonActions(buttons, buttonAction) 
+{
+    buttons.forEach( (b) => {
         b.addEventListener('click', () => {
-            gCalcInput.push(b.innerText);
-            display.innerText = gCalcInput.join("");
+            buttonAction(b);
         });
     });
 
@@ -40,7 +131,7 @@ function createOpKeys(parentElement)
 
     let buttonArray = [];
 
-    for (let i = 0; i < 6; i++)
+    for (let i = 0; i < opSymbols.length; i++)
     {
         // create button
         const button = document.createElement("button");
@@ -48,7 +139,7 @@ function createOpKeys(parentElement)
         // add relevant tags
         button.classList.add( "NumKeys");
         button.setAttribute("id", `opKey${opSymbols[i]}`);
-        button.innerText = opSymbols[i];
+        button.textContent = opSymbols[i];
         // append to parent element
         parentElement.appendChild(button);
         
@@ -71,7 +162,7 @@ function createNumKeys(parentElement)
         // add relevant tags
         button.classList.add( "NumKeys");
         button.setAttribute("id", `numKey${i}`);
-        button.innerText = i;
+        button.textContent = i;
         // append to parent element
         parentElement.appendChild(button);
 
@@ -109,20 +200,3 @@ function createSubElements( parentElement, quantity, elementType, elementClass =
     return nodeArray;
 }
 
-function calcDisplayClear()
-{
-    document.querySelector("#calcDisplay1").innerText = "";
-}
-
-
-function mathOperate( x, y, mathOp)
-{
-    switch(mathOp)
-    {
-        case "+": return x + y;
-        case "-": return x - y;
-        case "*": return x * y;
-        case "/": return x / y;
-        default: return "?";
-    }
-}
