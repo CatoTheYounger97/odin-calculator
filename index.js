@@ -12,51 +12,47 @@ const opKeys = createOpKeys(calcOpKeys);
 // input
 
 let gRawInput = "";
-let gCountOperatorPress = 0;
+let gNumOne = "";
+let gNumTwo = "";
+let gMathOpOne = "";
+let gMathOpTwo = "";
 
 const numKeyAction = (button) => {
-    const input = button.textContent;
-    gRawInput += input;
-    updateDisplay(input);
+    const numInput = button.textContent;
+    gRawInput += numInput;
+    updateDisplay(numInput);
 };
 
 const opKeyAction = (button) => {
 
-    if (gRawInput === "") return;
-
-    const mathOp = button.textContent;
-
-    if (mathOp === "CLEAR") {
-        clearAll();
-        return;
-    }
-
-    ++gCountOperatorPress;
-
-    if (gCountOperatorPress >= 2) {
-        gCountOperatorPress = 1;
-        
-        const result = getResult();
-
-        if (result === false) {
-            return;
-        }
-        gRawInput = result; // returns answer to the calculation
-
-        clearDisplay();
-        updateDisplay(gRawInput);
-
-    }
-
-    if (mathOp === "=")
-    {
-        gCountOperatorPress = 0
-    } else {
-        gRawInput += mathOp;         
-        updateDisplay(mathOp);
-    }
+    const opInput = button.textContent;
+            
+    if (gNumOne === "") gNumOne = gRawInput;
+    else gNumTwo = gRawInput;
+    // gNumTwo = (gNumOne != "") ? gRawInput : gNumTwo;
+    // gNumOne = (gNumOne === "") ? gRawInput : gNumOne;
     
+    gRawInput = "";
+
+    gMathOpOne = (gMathOpOne === "") ? opInput : gMathOpOne;
+
+    if (gNumTwo == "") { // if an operator is pressed but no second number has been inputted
+        // do nothing
+    } else  {
+        const result = mathOperate( gNumOne,gNumTwo, gMathOpOne);
+
+        gNumOne = result;
+        gNumTwo = "";
+        gMathOpOne = (opInput === "=") ? "" : opInput;
+    }
+
+    clearDisplay();
+    updateDisplay(`${gNumOne} ${gMathOpOne} ${gNumTwo}`);
+
 };
+
+
+
 
 setButtonActions(numKeys, numKeyAction); 
 
@@ -66,23 +62,6 @@ setButtonActions(opKeys, opKeyAction);
 
 // FUNCTIONS
 
-function getResult()
-{
-    mathOpIndex = gRawInput.search(/[+|-|*|\/]/); // find the operator
-    
-    mathOp = gRawInput[mathOpIndex];
-
-    numbers = gRawInput.split(mathOp);
-
-    if (numbers[1] === "") return false; // when a only a single operator and operand are submitted (occurs with "=")
-
-    numOne = numbers[0];
-    numTwo = numbers[1];
-
-    const result = mathOperate(numOne, numTwo, mathOp);
-
-    return Number(result).toFixed(3);
-}
 
 function clearAll()
 {
