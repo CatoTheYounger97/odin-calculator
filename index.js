@@ -14,10 +14,16 @@ const opKeys = createOpKeys(calcOpKeys);
 let gRawInput = "";
 let gNumOne = "";
 let gNumTwo = "";
-let gMathOpOne = "";
-let gMathOpTwo = "";
+let gMathOp = "";
+
 
 const numKeyAction = (button) => {
+
+    if (gNumOne != "" 
+        && gNumTwo === "" 
+        && gMathOp === "") 
+            return; // If an result has been produced with "=", and no operator has been selected.
+
     const numInput = button.textContent;
     gRawInput += numInput;
     updateDisplay(numInput);
@@ -26,48 +32,48 @@ const numKeyAction = (button) => {
 const opKeyAction = (button) => {
 
     const opInput = button.textContent;
+
+    if (opInput === "CLEAR") {
+        clearAll();
+        return;
+    }
+
+    if (gRawInput === "" && gNumOne === "") return;
             
     if (gNumOne === "") gNumOne = gRawInput;
     else gNumTwo = gRawInput;
-    // gNumTwo = (gNumOne != "") ? gRawInput : gNumTwo;
-    // gNumOne = (gNumOne === "") ? gRawInput : gNumOne;
-    
     gRawInput = "";
 
-    gMathOpOne = (gMathOpOne === "") ? opInput : gMathOpOne;
+    gMathOp = (gMathOp === "" && opInput != "=") ? opInput : gMathOp;
 
     if (gNumTwo == "") { // if an operator is pressed but no second number has been inputted
         // do nothing
-    } else  {
-        const result = mathOperate( gNumOne,gNumTwo, gMathOpOne);
+    } else {
+        const result = mathOperate( gNumOne,gNumTwo, gMathOp);
 
         gNumOne = result;
         gNumTwo = "";
-        gMathOpOne = (opInput === "=") ? "" : opInput;
+        gMathOp = (opInput === "=") ? "" : opInput;
     }
 
     clearDisplay();
-    updateDisplay(`${gNumOne} ${gMathOpOne} ${gNumTwo}`);
+    updateDisplay(`${gNumOne} ${gMathOp} ${gNumTwo}`);
 
 };
-
-
-
 
 setButtonActions(numKeys, numKeyAction); 
 
 setButtonActions(opKeys, opKeyAction); 
 
-
-
 // FUNCTIONS
-
 
 function clearAll()
 {
     clearDisplay()
     gRawInput = "";
-    gCountOperatorPress = 0
+    gNumOne = "";
+    gNumTwo = "";
+    gMathOp = "";
 }
 
 
