@@ -29,6 +29,7 @@ let gNum1 = "";
 let gNum2 = "";
 let gMathOp1 = "";
 let gMathOp2 = "";
+let gEqualsUsed = false;
 
 // calculate
 
@@ -61,7 +62,6 @@ const buttonAction = (button) => {
     const result = tryMathOp();
     
     if (Boolean(result)) {
-        console.log("result outcome");
         gNum1 = result;
         gNum2 = "";
         gMathOp1 = gMathOp2;
@@ -89,19 +89,18 @@ function tryMathOp()
 
 function inputNum(input) 
 {
-    if (gMathOp2 === "=") {
-        gMathOp2 = "";
+    if (gEqualsUsed) {
         gNum1 = "";
+        gEqualsUsed = false;
     }
     
-
-    if (gMathOp1 != "")       
-        gNum2 += input;
-    else gNum1 += input;
+    if (gMathOp1 === "")       
+        gNum1 += input;
+    else gNum2 += input;
 }
 function inputOperator(input) 
 {
-    if (gMathOp2 === "=") gMathOp2 = "";
+    gEqualsUsed = false;
 
     if (gNum2 === "")
         gMathOp1 = input;
@@ -116,11 +115,10 @@ function inputSelf(input)
             const result = mathOperate(gNum1, gNum2, gMathOp1);
     
             if (Boolean(result)) {
-                console.log("result outcome");
-                clearAll();
+                clearAll();               
                 gNum1 = result;
+                gEqualsUsed = true;
             }
-            gMathOp2 = "=";
             break;
 
         case "CLEAR":

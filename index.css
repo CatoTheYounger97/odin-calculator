@@ -1,6 +1,9 @@
 #calcDisplay1 {
+    padding: 10px;
     width: 200px;
     height: 50px;
     background-color: white;
     color: black;
+    text-align: end;
+    text-align: right;
 }
