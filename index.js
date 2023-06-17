@@ -83,7 +83,12 @@ setButtonActions(opKeys, buttonAction);
 function tryMathOp()
 {
     if (gMathOp2 === "") return false;
-
+    if (gMathOp1 === "/" && gNum2 === "0")
+    {
+        alert("can't divide by 0!");
+        clearAll();
+        return false;
+    }
     return mathOperate(gNum1, gNum2, gMathOp1);
 }
 
@@ -102,6 +107,8 @@ function inputOperator(input)
 {
     gEqualsUsed = false;
 
+    if (gNum1 === "" &&  gNum2 === "") return;
+
     if (gNum2 === "")
         gMathOp1 = input;
     else gMathOp2 = input;
@@ -111,22 +118,56 @@ function inputSelf(input)
 {
     switch(input)
     {
+        case ".":
+            if (gEqualsUsed) {
+                gNum1 = "0.";
+                gEqualsUsed = false;
+            }
+
+            if (gNum2 != "" && !gNum2.includes("."))
+                gNum2 += ".";
+             else if (gNum1 != "" && !gNum1.includes("."))  
+                gNum1 += ".";
+            else ; // do nothing
+
+            break;
         case "=":
-            const result = mathOperate(gNum1, gNum2, gMathOp1);
-    
+            gMathOp2 = "=";
+            const result = tryMathOp();
+            
             if (Boolean(result)) {
                 clearAll();               
                 gNum1 = result;
                 gEqualsUsed = true;
             }
+            gMathOp2 = "";
             break;
 
         case "CLEAR":
             clearAll();
             break;
             
-        case ".":
+        case "MINUS":
             //todo
+            if (gNum2 != "")
+                gNum2 = (+gNum2 * (-1)).toString();
+            else if (gNum1 != "")  
+                gNum1 = (+gNum1 * (-1)).toString();
+            else ; // do nothing
+
+            break;
+            
+        case "DEL":
+            if (gNum2 != "")
+                gNum2 = gNum2.slice(0, -1);
+            else if (gMathOp1 != "")
+                gMathOp1 = "";
+            else if (gNum1 != "") // allows deletion pre and calculation
+                gNum1 = gNum1.toString().slice(0, -1);
+            else ;// do nothing
+
+            break;
+
         default:
             console.log("error in switch statement");
     }
@@ -199,7 +240,7 @@ function setButtonActions(buttons, buttonAction)
 
 function createOpKeys(parentElement)
 {
-    const opSymbols = ["+", "-", "*", "/", "=", "CLEAR"];
+    const opSymbols = ["+", "-", "*", "/", "=", "CLEAR", "MINUS", "DEL", "."];
 
     let buttonArray = [];
 
