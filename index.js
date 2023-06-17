@@ -11,69 +11,155 @@ const numKeys = createNumKeys(calcNumKeys);
 const opKeys = createOpKeys(calcOpKeys);
 // input
 
-let gRawInput = "";
-let gNumOne = "";
-let gNumTwo = "";
-let gMathOp = "";
+// function Calculation() {
+//     this.num1 = "";
+//     this.num2 = "";
+//     this.operater = "";
+//     this.calculate = mathOperate(num1, num2, num3);
+// }
 
+// gCalculation = {
+//     num1: "",
+//     num2: "",
+//     operator: "",
+//     calculate: mathOperate(this.num1, this.num2, this.operator),
+// };
 
-const numKeyAction = (button) => {
+let gNum1 = "";
+let gNum2 = "";
+let gMathOp1 = "";
+let gMathOp2 = "";
 
-    if (gNumOne != "" 
-        && gNumTwo === "" 
-        && gMathOp === "") 
-            return; // If an result has been produced with "=", and no operator has been selected.
+// calculate
 
-    const numInput = button.textContent;
-    gRawInput += numInput;
-    updateDisplay(numInput);
-};
+const buttonAction = (button) => {
+     input = button.textContent;
+    // sort input 
+    // classify input and return (num, operator, =, clear, etc)
+    const typeOfInput  = classifyInput(input);
 
-const opKeyAction = (button) => {
+    // take action based on classification of input
+    switch(typeOfInput)
+    {
+        case "number":
+            inputNum(input);
+            break;
+        case "operator":
+            inputOperator(input);
+            break;
+        case "self": // input is a unique catagory described by the input string itself
+            inputSelf(input);
+            break;
+        default: console.log("error in switch statement");
+    }
+    // if num store in object 
+    // if operator then]
+    // if other then 
 
-    const opInput = button.textContent;
-
-    if (opInput === "CLEAR") {
-        clearAll();
-        return;
+    // try to calculate
+    // return result or outcomes if failed
+    const result = tryMathOp();
+    
+    if (Boolean(result)) {
+        console.log("result outcome");
+        gNum1 = result;
+        gNum2 = "";
+        gMathOp1 = gMathOp2;
+        gMathOp2 = ""; 
     }
 
-    if (gRawInput === "" && gNumOne === "") return;
-            
-    if (gNumOne === "") gNumOne = gRawInput;
-    else gNumTwo = gRawInput;
-    gRawInput = "";
 
-    gMathOp = (gMathOp === "" && opInput != "=") ? opInput : gMathOp;
-
-    if (gNumTwo == "") { // if an operator is pressed but no second number has been inputted
-        // do nothing
-    } else {
-        const result = mathOperate( gNumOne,gNumTwo, gMathOp);
-
-        gNumOne = result;
-        gNumTwo = "";
-        gMathOp = (opInput === "=") ? "" : opInput;
-    }
-
+    // update display
     clearDisplay();
-    updateDisplay(`${gNumOne} ${gMathOp} ${gNumTwo}`);
+    updateDisplay(gNum1 + gMathOp1 + gNum2);
+    
+}
 
-};
-
-setButtonActions(numKeys, numKeyAction); 
-
-setButtonActions(opKeys, opKeyAction); 
+setButtonActions(numKeys, buttonAction); 
+setButtonActions(opKeys, buttonAction); 
 
 // FUNCTIONS
 
+function tryMathOp()
+{
+    if (gMathOp2 === "") return false;
+
+    return mathOperate(gNum1, gNum2, gMathOp1);
+}
+
+function inputNum(input) 
+{
+    if (gMathOp2 === "=") {
+        gMathOp2 = "";
+        gNum1 = "";
+    }
+    
+
+    if (gMathOp1 != "")       
+        gNum2 += input;
+    else gNum1 += input;
+}
+function inputOperator(input) 
+{
+    if (gMathOp2 === "=") gMathOp2 = "";
+
+    if (gNum2 === "")
+        gMathOp1 = input;
+    else gMathOp2 = input;
+}
+
+function inputSelf(input) 
+{
+    switch(input)
+    {
+        case "=":
+            const result = mathOperate(gNum1, gNum2, gMathOp1);
+    
+            if (Boolean(result)) {
+                console.log("result outcome");
+                clearAll();
+                gNum1 = result;
+            }
+            gMathOp2 = "=";
+            break;
+
+        case "CLEAR":
+            clearAll();
+            break;
+            
+        case ".":
+            //todo
+        default:
+            console.log("error in switch statement");
+    }
+
+}
+
+
+function classifyInput(input)
+{
+    if (input <= 9 || input <= 0)
+        return "number";
+
+    switch(input)
+    {
+        case "+": 
+        case "-":
+        case "*":
+        case "/":
+            return "operator";
+        default: return "self";
+    }
+}
+
 function clearAll()
 {
-    clearDisplay()
-    gRawInput = "";
-    gNumOne = "";
-    gNumTwo = "";
-    gMathOp = "";
+    clearDisplay();
+    gNum1 = "";
+    gNum2 = "";
+    gMathOp1 = "";
+    gMathOp2 = "";
+
 }
 
 
@@ -88,7 +174,7 @@ function mathOperate( x, y, mathOp)
         case "-": return x - y;
         case "*": return x * y;
         case "/": return x / y;
-        default: return "?";
+        default: return false;
     }
 }
 
