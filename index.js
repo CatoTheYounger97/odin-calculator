@@ -1,7 +1,8 @@
 
 // create calculator body structure
 const pageContainer = createSubElements( document.body, 1, "div", null, "pageContainer");
-const calcDisplay = createSubElements(pageContainer, 1, "div", null, "calcDisplay");
+const calcDisplayTop = createSubElements(pageContainer, 1, "div", "CalcDisplay", "calcDisplay");
+const calcDisplayBottom = createSubElements(pageContainer, 1, "div", "CalcDisplay", "calcDisplay");
 const calcKeypad = createSubElements(pageContainer, 1, "div", null, "calcKeypad");
 // create calculator buttons
 const calcNumKeys = createSubElements(calcKeypad, 1, "div", null, "calcNumKeys");
@@ -15,7 +16,7 @@ let gNum1 = "";
 let gNum2 = "";
 let gMathOp = "";
 let gResult = 0;
-calcDisplay.textContent = gResult;
+calcDisplayBottom.textContent = gResult;
 
 // calculate
 
@@ -80,18 +81,30 @@ const inputAction = (input) => {
     console.log(gNum1 + " " + gMathOp + " " + gNum2);
     console.log(gResult);
 
-    calcDisplay.textContent = gResult;
-    // calcDisplay.textContent = gNum1 + " " + gMathOp + " " + gNum2; // add to sum preview
+    calcDisplayBottom.textContent = gResult;
+
+    if ( gMathOp === "=")
+        calcDisplayTop.textContent += (calcDisplayTop.textContent.includes("=") === false) ? " =" : "";
+    else
+        calcDisplayTop.textContent = gNum1 + " " + gMathOp + " " + gNum2; // add to sum preview
 }
 
 setButtonActions(numKeys, inputAction); 
 setButtonActions(opKeys, inputAction); 
 
 document.addEventListener("keydown", (e) => {
+    
+    // if (e.repeat) return;
 
-    if (e.repeat) return;
+    let key = e.key;
 
-    inputAction(e.key);
+    switch(key)
+    {
+        case "Backspace": key = "DEL"; break;
+        case "Enter": key = "="; break;
+    }
+
+    inputAction(key);
 });
 
 
