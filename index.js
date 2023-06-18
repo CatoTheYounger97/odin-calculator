@@ -62,7 +62,7 @@ const inputAction = (input) => {
             break;
 
         default: 
-            if (gMathOp === "=") {
+            if (gMathOp === "=" || gNum1 === "") {
                 gNum1 = "";
                 gMathOp = "";
             }
@@ -87,6 +87,7 @@ const inputAction = (input) => {
         calcDisplayTop.textContent += (calcDisplayTop.textContent.includes("=") === false) ? " =" : "";
     else
         calcDisplayTop.textContent = gNum1 + " " + gMathOp + " " + gNum2; // add to sum preview
+    
 }
 
 setButtonActions(numKeys, inputAction); 
