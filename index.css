@@ -6,4 +6,14 @@
     color: black;
     text-align: right;
     font-size: 32px;
+    display: flex;
+    justify-content: end;
+    flex-wrap: wrap;
+}
+
+#calcDisplayContainer {
+    padding: 10px;
+    width: 200px;
+    height: 50px;
+    display: flex;
 }

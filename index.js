@@ -1,8 +1,9 @@
 
 // create calculator body structure
 const pageContainer = createSubElements( document.body, 1, "div", null, "pageContainer");
-const calcDisplayTop = createSubElements(pageContainer, 1, "div", "CalcDisplay", "calcDisplay");
-const calcDisplayBottom = createSubElements(pageContainer, 1, "div", "CalcDisplay", "calcDisplay");
+const calcDisplayContainer = createSubElements(pageContainer, 1, "div", null, "calcDisplayContainer");
+const calcDisplayTop = createSubElements(calcDisplayContainer, 1, "div", "CalcDisplay", "calcDisplay");
+const calcDisplayBottom = createSubElements(calcDisplayContainer, 1, "div", "CalcDisplay", "calcDisplay");
 const calcKeypad = createSubElements(pageContainer, 1, "div", null, "calcKeypad");
 // create calculator buttons
 const calcNumKeys = createSubElements(calcKeypad, 1, "div", null, "calcNumKeys");
@@ -41,9 +42,11 @@ const inputAction = (input) => {
             break;
 
         case ".": 
+                
+
             gResult = (gMathOp === "") 
-                ? gNum1 = (gNum1.includes(".") === false) ? gNum1 += input : gNum1
-                : gNum2 = (gNum2.includes(".") === false) ? gNum2 += input : gNum2;
+                ? gNum1 = (gNum1.includes(".") === false) ? gNum1 = (gNum1*1).toString() + input : gNum1
+                : gNum2 = (gNum2.includes(".") === false) ? gNum2 = (gNum2*1).toString() + input : gNum2;
             break;
 
         case "+": 
@@ -98,6 +101,22 @@ document.addEventListener("keydown", (e) => {
     // if (e.repeat) return;
 
     let key = e.key;
+
+    switch(key)
+    {
+        case (typeof(+key) === "number"): 
+        case "+": 
+        case "-": 
+        case "*": 
+        case "/": 
+        case "=":
+        case "Backspace":
+        case "Enter":
+            break;
+        default:
+            if (key >= 0) break;
+            return;
+    }
 
     switch(key)
     {
