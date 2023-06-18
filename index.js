@@ -22,30 +22,46 @@ calcDisplay.textContent = gResult;
 const inputAction = (input) => {
 
     switch(input)
-    {
+    {   
+        case "CLEAR":
+            clearAll();
+            break;
+
+        case "DEL": 
+            gResult = (gMathOp === "") 
+                ? gNum1 = gNum1.slice(0, -1) 
+                : gNum2 = gNum2.slice(0, -1);
+            break;
+
+        case "MINUS": 
+            gResult = (gMathOp === "") 
+                ? gNum1 = (gNum1 * (-1)).toString() 
+                : gNum2 = (gNum2 * (-1)).toString();
+            break;
+
         case "+": 
         case "-": 
         case "*": 
         case "/": 
+        case "=":
 
-            // gMathOp = input;
             gResult = mathOperate(gNum1, gNum2, gMathOp);
+
             gMathOp = input;
+            // gMathOp = (input === "=") ? "" : input;
 
             gNum1 = gResult;
             gNum2 = "";
             break;
 
         default: 
-            // if ( gMathOp === "") {
-            //     gNum1 += input;
-            //     gResult = gNum1;
-            // } else {
-            //     gNum2 += input;
-            //     gResult = gNum2;
-            // }
+            if (gMathOp === "=") {
+                gNum1 = "";
+                gMathOp = "";
+            }
 
             gResult = (gMathOp === "") ? gNum1 += input : gNum2 += input;
+            // prevents second operand from being inputed if no operator is provided.
     }
 
     
@@ -59,6 +75,7 @@ const inputAction = (input) => {
     console.log(gResult);
 
     calcDisplay.textContent = gResult;
+    // calcDisplay.textContent = gNum1 + " " + gMathOp + " " + gNum2; // add to sum preview
 }
 
 setButtonActions(numKeys, inputAction); 
@@ -76,11 +93,7 @@ document.addEventListener("keydown", (e) => {
 
 function mathOperate( x, y, op)
 {
-    // x = (Boolean(x) === false ? 0 : parseFloat(x));
-    // y = (Boolean(y) === false ? 1 : parseFloat(y));
-    // op = (Boolean(op) === false ? "*" : op);
-
-    if (Boolean(y) === false) return x;
+    if (y === "") return x;
     
     x = parseFloat(x);
     y = parseFloat(y);
@@ -97,25 +110,11 @@ function mathOperate( x, y, op)
 
 function clearAll()
 {
-    clearDisplay();
     gNum1 = "";
     gNum2 = "";
-    gMathOp1 = "";
-    gMathOp2 = "";
+    gMathOp = "";
+    gResult = 0;
 
-}
-
-
-
-
-function updateDisplay(input)
-{
-    calcDisplay.textContent += input;
-}
-
-function clearDisplay()
-{
-    calcDisplay.textContent = "";
 }
 
 
