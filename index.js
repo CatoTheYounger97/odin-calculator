@@ -11,183 +11,87 @@ const numKeys = createNumKeys(calcNumKeys);
 const opKeys = createOpKeys(calcOpKeys);
 // input
 
-// function Calculation() {
-//     this.num1 = "";
-//     this.num2 = "";
-//     this.operater = "";
-//     this.calculate = mathOperate(num1, num2, num3);
-// }
-
-// gCalculation = {
-//     num1: "",
-//     num2: "",
-//     operator: "",
-//     calculate: mathOperate(this.num1, this.num2, this.operator),
-// };
-
 let gNum1 = "";
 let gNum2 = "";
-let gMathOp1 = "";
-let gMathOp2 = "";
-let gEqualsUsed = false;
+let gMathOp = "";
+let gResult = 0;
+calcDisplay.textContent = gResult;
 
 // calculate
 
-const buttonAction = (button) => {
-     input = button.textContent;
-    // sort input 
-    // classify input and return (num, operator, =, clear, etc)
-    const typeOfInput  = classifyInput(input);
-
-    // take action based on classification of input
-    switch(typeOfInput)
-    {
-        case "number":
-            inputNum(input);
-            break;
-        case "operator":
-            inputOperator(input);
-            break;
-        case "self": // input is a unique catagory described by the input string itself
-            inputSelf(input);
-            break;
-        default: console.log("error in switch statement");
-    }
-    // if num store in object 
-    // if operator then]
-    // if other then 
-
-    // try to calculate
-    // return result or outcomes if failed
-    const result = tryMathOp();
-    
-    if (Boolean(result)) {
-        gNum1 = result;
-        gNum2 = "";
-        gMathOp1 = gMathOp2;
-        gMathOp2 = ""; 
-    }
-
-
-    // update display
-    clearDisplay();
-    updateDisplay(gNum1 + gMathOp1 + gNum2);
-    
-}
-
-setButtonActions(numKeys, buttonAction); 
-setButtonActions(opKeys, buttonAction); 
-
-// FUNCTIONS
-
-function tryMathOp()
-{
-    if (gMathOp2 === "") return false;
-    if (gMathOp1 === "/" && gNum2 === "0")
-    {
-        alert("can't divide by 0!");
-        clearAll();
-        return false;
-    }
-    return mathOperate(gNum1, gNum2, gMathOp1);
-}
-
-function inputNum(input) 
-{
-    if (gEqualsUsed) {
-        gNum1 = "";
-        gEqualsUsed = false;
-    }
-    
-    if (gMathOp1 === "")       
-        gNum1 += input;
-    else gNum2 += input;
-}
-function inputOperator(input) 
-{
-    gEqualsUsed = false;
-
-    if (gNum1 === "" &&  gNum2 === "") return;
-
-    if (gNum2 === "")
-        gMathOp1 = input;
-    else gMathOp2 = input;
-}
-
-function inputSelf(input) 
-{
-    switch(input)
-    {
-        case ".":
-            if (gEqualsUsed) {
-                gNum1 = "0.";
-                gEqualsUsed = false;
-            }
-
-            if (gNum2 != "" && !gNum2.includes("."))
-                gNum2 += ".";
-             else if (gNum1 != "" && !gNum1.includes("."))  
-                gNum1 += ".";
-            else ; // do nothing
-
-            break;
-        case "=":
-            gMathOp2 = "=";
-            const result = tryMathOp();
-            
-            if (Boolean(result)) {
-                clearAll();               
-                gNum1 = result;
-                gEqualsUsed = true;
-            }
-            gMathOp2 = "";
-            break;
-
-        case "CLEAR":
-            clearAll();
-            break;
-            
-        case "MINUS":
-            //todo
-            if (gNum2 != "")
-                gNum2 = (+gNum2 * (-1)).toString();
-            else if (gNum1 != "")  
-                gNum1 = (+gNum1 * (-1)).toString();
-            else ; // do nothing
-
-            break;
-            
-        case "DEL":
-            if (gNum2 != "")
-                gNum2 = gNum2.slice(0, -1);
-            else if (gMathOp1 != "")
-                gMathOp1 = "";
-            else if (gNum1 != "") // allows deletion pre and calculation
-                gNum1 = gNum1.toString().slice(0, -1);
-            else ;// do nothing
-
-            break;
-
-        default:
-            console.log("error in switch statement");
-    }
-
-}
-
-
-function classifyInput(input)
-{
-    if (input <= 9 || input <= 0)
-        return "number";
+const inputAction = (input) => {
 
     switch(input)
     {
         case "+": 
-        case "-":
-        case "*":
-        case "/":
-            return "operator";
-        default: return "self";
+        case "-": 
+        case "*": 
+        case "/": 
+
+            // gMathOp = input;
+            gResult = mathOperate(gNum1, gNum2, gMathOp);
+            gMathOp = input;
+
+            gNum1 = gResult;
+            gNum2 = "";
+            break;
+
+        default: 
+            // if ( gMathOp === "") {
+            //     gNum1 += input;
+            //     gResult = gNum1;
+            // } else {
+            //     gNum2 += input;
+            //     gResult = gNum2;
+            // }
+
+            gResult = (gMathOp === "") ? gNum1 += input : gNum2 += input;
+    }
+
+    
+    // first number
+    // operator 
+    // second number
+
+
+    // update display
+    console.log(gNum1 + " " + gMathOp + " " + gNum2);
+    console.log(gResult);
+
+    calcDisplay.textContent = gResult;
+}
+
+setButtonActions(numKeys, inputAction); 
+setButtonActions(opKeys, inputAction); 
+
+document.addEventListener("keydown", (e) => {
+
+    if (e.repeat) return;
+
+    inputAction(e.key);
+});
+
+
+// FUNCTIONS
+
+function mathOperate( x, y, op)
+{
+    // x = (Boolean(x) === false ? 0 : parseFloat(x));
+    // y = (Boolean(y) === false ? 1 : parseFloat(y));
+    // op = (Boolean(op) === false ? "*" : op);
+
+    if (Boolean(y) === false) return x;
+    
+    x = parseFloat(x);
+    y = parseFloat(y);
+
+    switch(op)
+    {
+        case "+": return x + y;
+        case "-": return x - y;
+        case "*": return x * y;
+        case "/": return x / y;
+        default: return false;
     }
 }
 
@@ -202,24 +106,11 @@ function clearAll()
 }
 
 
-function mathOperate( x, y, mathOp)
-{
-    x = parseFloat(x);
-    y = parseFloat(y);
 
-    switch(mathOp)
-    {
-        case "+": return x + y;
-        case "-": return x - y;
-        case "*": return x * y;
-        case "/": return x / y;
-        default: return false;
-    }
-}
 
 function updateDisplay(input)
 {
-    calcDisplay.textContent += input + " ";
+    calcDisplay.textContent += input;
 }
 
 function clearDisplay()
@@ -232,7 +123,7 @@ function setButtonActions(buttons, buttonAction)
 {
     buttons.forEach( (b) => {
         b.addEventListener('click', () => {
-            buttonAction(b);
+            buttonAction(b.textContent);
         });
     });
 
