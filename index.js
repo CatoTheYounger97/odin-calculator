@@ -39,6 +39,12 @@ const inputAction = (input) => {
                 : gNum2 = (gNum2 * (-1)).toString();
             break;
 
+        case ".": 
+            gResult = (gMathOp === "") 
+                ? gNum1 = (gNum1.includes(".") === false) ? gNum1 += input : gNum1
+                : gNum2 = (gNum2.includes(".") === false) ? gNum2 += input : gNum2;
+            break;
+
         case "+": 
         case "-": 
         case "*": 
