@@ -27,7 +27,7 @@ const inputAction = (input) => {
     {   
         case "CLEAR":
             clearAll();
-            break;
+            return; // after a clear all it's unecessary to execute further.
 
         case "DEL": 
             gResult = (gMathOp === "") 
@@ -58,13 +58,12 @@ const inputAction = (input) => {
             if (gMathOp  === "/" && gNum2 == 0) {
                 calcDisplayBottom.textContent = "Can't divide by 0!";
                 clearAll();
-                return;
+                return; // after a clear all it's unecessary to execute further. 
             }
 
             gResult = mathOperate(gNum1, gNum2, gMathOp);
 
             gMathOp = input;
-            // gMathOp = (input === "=") ? "" : input;
 
             gNum1 = gResult;
             gNum2 = "";
