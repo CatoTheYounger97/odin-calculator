@@ -56,7 +56,7 @@ const inputAction = (input) => {
         case "/": 
         case "=":
 
-            if (gMathOp  === "/" && gNum2 == 0) {
+            if (gMathOp  === "/" && gNum2 == 0 && gNum1 != "") {
                 calcDisplayBottom.textContent = "Can't divide by 0!";
                 clearAll();
                 return; // after a clear all warning message remains until next input

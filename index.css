@@ -7,19 +7,21 @@ body {
 
 #calcContainer1 {
     width: 300px;
-    height: 500px;
+    /* height: 500px; */
+    background-color: orange;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
 
+/* DIPLAY */
 #calcDisplayContainer1 {
     padding: 10px;
     margin: 10px;
     /* width: auto; */
     min-height: 100px;
     background-color: white;
-    color: black;
+    color: white;
     display: flex;
     flex-direction: column;
 }
@@ -43,7 +45,7 @@ body {
     font-size: 42px;
 }
 
-
+/* NUMPAD */
 .NumKeys {
 }
 
@@ -51,10 +53,10 @@ body {
     display: flex;
 }
 
-#calcNumKeys1,
-#calcOpKeys1 {
-    display: flex;
-    flex-flow: wrap;
-    flex: 1;
-    justify-content: center;
+#calcNumKeys1 .NumKeys{
+    background-color: blue;
+}
+#calcOpKeys1 .NumKeys{
+    background-color: red;
+
 }
