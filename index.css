@@ -1,19 +1,60 @@
-.CalcDisplay {
-    padding: 10px;
-    width: 200px;
-    height: 50px;
-    background-color: white;
-    color: black;
-    text-align: right;
-    font-size: 32px;
+body {
+    min-height: 100vh;
     display: flex;
-    justify-content: end;
-    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
-#calcDisplayContainer {
-    padding: 10px;
-    width: 200px;
-    height: 50px;
+#calcContainer1 {
+    width: 300px;
+    height: 500px;
     display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+#calcDisplayContainer1 {
+    padding: 10px;
+    margin: 10px;
+    /* width: auto; */
+    min-height: 100px;
+    background-color: white;
+    color: black;
+    display: flex;
+    flex-direction: column;
+}
+
+#calcDisplayBottom1,
+#calcDisplayTop1 {
+    padding: 10px;
+    word-wrap: break-word;
+    text-align: end;
+}
+
+#calcDisplayTop1 {
+    background-color: red;
+    flex: 1;
+    font-size: 21px;
+}
+
+#calcDisplayBottom1 {
+    background-color: blue;
+    flex: 2;
+    font-size: 42px;
+}
+
+
+.NumKeys {
+}
+
+#calcKeypad1 {
+    display: flex;
+}
+
+#calcNumKeys1,
+#calcOpKeys1 {
+    display: flex;
+    flex-flow: wrap;
+    flex: 1;
+    justify-content: center;
 }

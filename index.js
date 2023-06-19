@@ -1,10 +1,11 @@
 
 // create calculator body structure
 const pageContainer = createSubElements( document.body, 1, "div", null, "pageContainer");
-const calcDisplayContainer = createSubElements(pageContainer, 1, "div", null, "calcDisplayContainer");
-const calcDisplayTop = createSubElements(calcDisplayContainer, 1, "div", "CalcDisplay", "calcDisplay");
-const calcDisplayBottom = createSubElements(calcDisplayContainer, 1, "div", "CalcDisplay", "calcDisplay");
-const calcKeypad = createSubElements(pageContainer, 1, "div", null, "calcKeypad");
+const calcContainer = createSubElements( pageContainer, 1, "div", null, "calcContainer");
+const calcDisplayContainer = createSubElements(calcContainer, 1, "div", null, "calcDisplayContainer");
+const calcDisplayTop = createSubElements(calcDisplayContainer, 1, "div", "CalcDisplay", "calcDisplayTop");
+const calcDisplayBottom = createSubElements(calcDisplayContainer, 1, "div", "CalcDisplay", "calcDisplayBottom");
+const calcKeypad = createSubElements(calcContainer, 1, "div", null, "calcKeypad");
 // create calculator buttons
 const calcNumKeys = createSubElements(calcKeypad, 1, "div", null, "calcNumKeys");
 const calcOpKeys = createSubElements(calcKeypad, 1, "div", null, "calcOpKeys");
@@ -27,7 +28,7 @@ const inputAction = (input) => {
     {   
         case "CLEAR":
             clearAll();
-            return; // after a clear all it's unecessary to execute further.
+            break;
 
         case "DEL": 
             gResult = (gMathOp === "") 
@@ -58,7 +59,7 @@ const inputAction = (input) => {
             if (gMathOp  === "/" && gNum2 == 0) {
                 calcDisplayBottom.textContent = "Can't divide by 0!";
                 clearAll();
-                return; // after a clear all it's unecessary to execute further. 
+                return; // after a clear all warning message remains until next input
             }
 
             gResult = mathOperate(gNum1, gNum2, gMathOp);
