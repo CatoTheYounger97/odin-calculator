@@ -124,6 +124,7 @@ document.addEventListener("keydown", (e) => {
         case "-": 
         case "*": 
         case "/": 
+            e.preventDefault();
         case "=":
         case "Backspace":
         case "Enter":
