@@ -46,17 +46,32 @@ body {
 }
 
 /* NUMPAD */
-.NumKeys {
+.NumKeys, 
+.OpKeys {
+    width: 50px;
+    height: 50px;
+    margin: 0px;
+
 }
 
 #calcKeypad1 {
+    margin:  10px;
     display: flex;
+    justify-content: space-between;
 }
 
-#calcNumKeys1 .NumKeys{
+#calcNumKeys1 {
+    width: 150px;
+}
+
+#calcOpKeys1 {
+    width: 100px;
+}
+
+
+.NumKeys{
     background-color: blue;
 }
-#calcOpKeys1 .NumKeys{
+.OpKeys{
     background-color: red;
-
 }

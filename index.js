@@ -19,6 +19,8 @@ let gNum2 = "";
 let gMathOp = "";
 let gResult = 0;
 calcDisplayBottom.textContent = gResult;
+calcDisplayTop.textContent = gResult;
+
 
 // calculate
 
@@ -96,6 +98,9 @@ const inputAction = (input) => {
         calcDisplayTop.textContent += (calcDisplayTop.textContent.includes("=") === false) ? " =" : "";
     else
         calcDisplayTop.textContent = gNum1 + " " + gMathOp + " " + gNum2; // add to sum preview
+
+    if (calcDisplayTop.textContent === "  ") calcDisplayTop.textContent = 0;
+    if (calcDisplayBottom.textContent === "") calcDisplayBottom.textContent = 0;
     
 }
 
@@ -184,7 +189,7 @@ function createOpKeys(parentElement)
         const button = document.createElement("button");
 
         // add relevant tags
-        button.classList.add( "NumKeys");
+        button.classList.add( "OpKeys");
         button.setAttribute("id", `opKey${opSymbols[i]}`);
         button.textContent = opSymbols[i];
         // append to parent element
@@ -201,7 +206,7 @@ function createNumKeys(parentElement)
 {
     let buttonArray = [];
 
-    for (let i = 0; i < 10; i++)
+    for (let i = 1; i <= 10; i++)
     {
         // create button
         const button = document.createElement("button");
@@ -209,7 +214,13 @@ function createNumKeys(parentElement)
         // add relevant tags
         button.classList.add( "NumKeys");
         button.setAttribute("id", `numKey${i}`);
-        button.textContent = i;
+        button.textContent = i ;
+
+        if ( i == 10) {
+            button.setAttribute("id", `numKey0`);
+            button.textContent = "0" ;
+        }
+
         // append to parent element
         parentElement.appendChild(button);
 
