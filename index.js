@@ -39,6 +39,11 @@ const inputAction = (input) => {
             break;
 
         case "MINUS": 
+            if (gMathOp === "=") {
+                gNum1 = (gNum1 * (-1)).toString()
+                gResult = gNum1;
+                break;
+            }
             gResult = (gMathOp === "") 
                 ? gNum1 = (gNum1 * (-1)).toString() 
                 : gNum2 = (gNum2 * (-1)).toString();
@@ -99,7 +104,7 @@ const inputAction = (input) => {
     else
         calcDisplayTop.textContent = gNum1 + " " + gMathOp + " " + gNum2; // add to sum preview
 
-    if (calcDisplayTop.textContent === "  ") calcDisplayTop.textContent = 0;
+    if (calcDisplayTop.textContent === "  ") calcDisplayTop.textContent = 0; // value will be double empty space after clear/full Del
     if (calcDisplayBottom.textContent === "") calcDisplayBottom.textContent = 0;
     
 }
@@ -179,7 +184,7 @@ function setButtonActions(buttons, buttonAction)
 
 function createOpKeys(parentElement)
 {
-    const opSymbols = ["+", "-", "*", "/", "=", "CLEAR", "MINUS", "DEL", "."];
+    const opSymbols = ["+", "CLEAR", "-", "DEL", "*", "MINUS", "/", ".", "="];
 
     let buttonArray = [];
 
