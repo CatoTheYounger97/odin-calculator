@@ -55,6 +55,12 @@ const inputAction = (input) => {
         case "/": 
         case "=":
 
+            if (gMathOp  === "/" && gNum2 == 0) {
+                calcDisplayBottom.textContent = "Can't divide by 0!";
+                clearAll();
+                return;
+            }
+
             gResult = mathOperate(gNum1, gNum2, gMathOp);
 
             gMathOp = input;
@@ -62,7 +68,7 @@ const inputAction = (input) => {
 
             gNum1 = gResult;
             gNum2 = "";
-            break;
+            break;            
 
         default: 
             if (gMathOp === "=" || gNum1 === "") {
@@ -104,7 +110,6 @@ document.addEventListener("keydown", (e) => {
 
     switch(key)
     {
-        case (typeof(+key) === "number"): 
         case "+": 
         case "-": 
         case "*": 
